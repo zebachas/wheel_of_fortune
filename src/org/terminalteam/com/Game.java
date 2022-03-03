@@ -17,12 +17,12 @@ public class Game {
     }
 
     public enum Category {
-        FOOD_AND_DRINK("categories/foodanddrink.txt"),
-        FUN_AND_GAMES("categories/funandgames.txt"),
-        MOVIE_QUOTES("categories/moviequotes.txt"),
-        FICTIONAL_CHARACTERS("categories/fictionalcharacters.txt"),
-        OCCUPATIONS("categories/occupations.txt"),
-        SLOGANS("categories/slogan.txt");
+        FOOD_AND_DRINK("resources/foodanddrink.txt"),
+        FUN_AND_GAMES("resources/funandgames.txt"),
+        MOVIE_QUOTES("resources/moviequotes.txt"),
+        FICTIONAL_CHARACTERS("resources/fictionalcharacters.txt"),
+        OCCUPATIONS("resources/occupations.txt"),
+        SLOGANS("resources/slogan.txt");
 
         private String filePath;
 

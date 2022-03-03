@@ -94,9 +94,9 @@ public class GameServer {
 
         public String getAllUsers() {
             StringBuilder users = new StringBuilder();
-            String one = ("                        ---------------------------------");
-            String two = ("                        |........PLAYERS PLAYING........|");
-            String three = ("                        ---------------------------------");
+            String one = "                        ---------------------------------";
+            String two = "                        |........PLAYERS PLAYING........|";
+            String three = "                        ---------------------------------";
             for (ServerWorker sw : serverWorkers) {
                 sw.out.println("\n");
                 sw.out.println(one);
@@ -109,7 +109,7 @@ public class GameServer {
         }
 
         public void showLogo() {
-            Path filePath = Paths.get("categories/logo.txt");
+            Path filePath = Paths.get("resources/logo.txt");
             try {
                 List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
                 for (String line : lines) {
