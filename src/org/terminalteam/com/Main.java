@@ -1,15 +1,14 @@
 package org.terminalteam.com;
 
 public class Main {
+
+    public static final int DEFAULT_PORT = 9999;
+
     public static void main(String[] args) {
-        System.out.println("___________");
 
-        String row = "|O|_|_|_|_|";
+        int port = args.length > 0 ? Integer.parseInt(args[0]) : DEFAULT_PORT;
+        Game game = new Game(3, port);
+        game.start();
 
-        System.out.println(row);
-        System.out.println(row);
-        System.out.println(row);
-        System.out.println(row);
-        System.out.println(row);
     }
 }

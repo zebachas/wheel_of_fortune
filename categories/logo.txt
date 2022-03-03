@@ -1,0 +1,44 @@
+                               .mmmmmmmmmmmmmm.
+                          .mMMM"'     'MMMMMMMMMMMm.
+                      .mMMMM"'         MMMMMMMMMMMMMMMm.
+                   .mMMMMMM:           MMMMMMMMMMMMMMMMMMM.
+                 .MMMMMMMMMM.          MMMMMMMMMMMMMM'  'MMM.
+               .MMMMMMMMMMMMM          MMMMMMMMMMMMM'      'MM.
+             .MMMMMMMMMMMMMMMMMMMiMMMMMMMMMMMMMMMMMMMMMMMMMMM'MM.
+           .MMMM   M'  'M   M   MMM   M        M        M   M 'MMM.
+          .MM''M   M    M   M   MMM   M        M        M   M:MMMMM.
+         .MM   M   M    M   M   MMM   M   MMMMMM   MMMMMM   MMMMMMMM.
+        :MM    M:  '    '   M   MMM   M   MMMMMM   MMMMMM   MMMMMMMMM:
+       :MM     MM          .M         M        M        M   MMMMMMMMMM:
+       MM      :M     M    :M         M        M        M   MMMMMMMMMMM
+      MM:      'M    .M.   MM   MMM   M   MMMMMM   MMMMMM   MMMMMMMMMMMM
+     MMMMMM.    M    :M:   MM   MMM   M        M        M        MMMMMMMM
+    :MMMMMMMMMM 'M   MMM   MM   MMM   M        M        M        MMM' 'MM:
+    MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM'     MM
+   :MMMMMMMMMMMMMMMMMMMM:.  'MMMMM"' '"MMM       MMMMMMMMMMMM''         :M:
+   MMMMMMMMMMMMMMMMMMMMMMMM.  'MM'     'MM       MMMMMMM'                MM
+   MMMMMMMMMMMMMMMMMMMMMMMMMMMMM'  .m.  'M   MMMMMMM"'                   MM
+   MMMMMMMMMMMMMMMMMMMMMMMMMMMMM   MMM   M   MMMMM                       MM
+   MMMMMMMMMMMMMMMMMMMMMMMMMMMMM   MMM   M       MMMMMMMMMMMMMMMMMMMMMMMMMM
+   M:'                        MM   MMM   M       MMMMMMMMMMMMMMMMMMMMMMMMMM
+   M:                         MM   'P'   M   MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM
+   MM                    .:MMMMMM.     .MM   MM   'MMMMMMMMMMMMMMMMMMMMMMMM
+   MM                .:MMMMMMMMMMM:. .:MMM   MM        '":MMMMMMMMMMMMMMMMM
+   :M: MMMMMMMMM.MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM MMMMMMMMMMMMMMMMMMMMMMMM:
+    MM M       MMM"' '"MMM      'PM         M   M.M   M   MMM   M        M
+    :M.M       MM'     'MM       'M         M   M:M   M    MM   M        M
+     MMM   MMMMM'  .m.  'M   MM.  :MMM   MMMM   MMM   M    :M   M   MMMMMM
+     'MM   MMMMM   MMM   M   MM'  :MMM   M::M   MMM   M     '   M   MMMMMM
+      'M       M   MMM   M       .MMMM   M':M   MMM   M         M        M
+       M       M   MMM   M   .   MMMMM   M 'M.  MMM  .M   .     M        M
+       M   MMMMM   'P'   M   M:  'MMMM   M  M:  'P'  :M   M:    M   MMMMMM
+       M   MMMMMM.     .MM   MM.  'MMM   M  'M.     .MM   MM    M        M
+       M   MMMMMMM:. .:M'M   MMM.  :MM   M   M:.   .:MM   MMM   M        M
+       MMMMMMMMM  MMMM'  'MMMMMMMMMMMMMMMM    "MMMMMMMMMMMMMMMMMMMMMMMMMMM
+              'MM.         :MMMMMMMMMMMM        'MMMMMMMMMMMMMMM'
+                'MM:       MMMMMMMMMMMMM          MMMMMMMMMMMM'
+                  'MMM    MMMMMMMMMMMMMM           MMMMMMMM"
+                    '"MMMMMMMMMMMMMMMMMM           MMMMM"'
+                        '"MMMMMMMMMMMMMM     .:mMMMMM"'
+                             '"MMMMMMMMMmmmmmMMMM"
+                                    ''""""""''
