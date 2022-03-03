@@ -1,0 +1,100 @@
+A Bag Full Of Blue M&M's
+A Bag Of Baby Spinach
+A Bag Of Blue M&M's
+A Bellyful Of Sugar
+A Big Batch Of Hot Chili
+A Big Box Of Assorted Chocolates
+A Big Plate Of Spaghetti
+A Big Pot Of Corned Beef & Cabbage
+A Big Pot Of Corned Beef And Cabbage
+A Big Pot Of Irish Stew	6	18	1
+A Bottle Of Dry Sherry	5	18	1
+A Bottle Of Ice-Cold Jones Cream Soda	7	30	1
+A Bowl Of After- Dinner Mints	6	23	1
+A Bowl Of After-Dinner Mints	5	23	1
+A Bowl Of Boston Baked Beans	6	23	1
+A Bowl Of Fresh Berries	5	19	1
+A Bowl Of Fried Okra	5	16	1
+A Bowl Of Homemade Warm Biscuits	6	27	1
+A Bowl Of Pico De Gallo With Chips	8	27	1
+A Bowl Of Warm Biscuits	5	19	1
+A Bowl Of Warm Corned Beef & Cabbage	7	28	1
+A Bowl Of Warm Homemade Biscuits	6	27	1
+A Bowl Of Wonton Noodles	5	20	1
+A Box Of Chewy Caramels	5	19	1
+A Box Of Cracker Jacks	5	18	1
+A Box Of Fresh Doughnuts	5	20	1
+A Breakfast Of Green Eggs & Ham	6	24	1
+A Breakfast Of Green Eggs And Ham	7	27	1
+A Bucket Of Buffalo Wings	5	21	1
+A Bucket Of Spicy Buffalo Wings	6	26	1
+A Can Of Condensed Tomato Soup	6	25	1
+A Cup Of Coffee And A Cookie	7	22	1
+A Cup Of Hot Chocolate	5	18	1
+A Cup Of Oatmeal	4	13	1
+A Cup Of Yogurt With Crunchy Granola	7	30	1
+A Delicious Meat Soup Called Fatta	6	29	1
+A Delicious Piece Of Birthday Cake	6	29	1
+A Dollop Of Yogurt	4	15	1
+A Drizzle Of Oil	4	13	1
+A Drizzle Of Olive Oil	5	18	1
+A Full Bottle Of Fresh Water	6	23	1
+A Giant Helping Of Mashed Sweet Potatoes	7	34	1
+A Giant Slice Of Apple Pie	6	21	1
+A Giant Slice Of Devil's Food Cake	7	27	1
+A Glass Of Bicarbonate Of Soda	6	25	1
+A Glass Of Bourbon	4	15	1
+A Glass Of Chardonnay	4	18	1
+A Glass Of Fresh Pineapple Juice	6	27	1
+A Glass Of Ginger Juice	5	19	1
+A Glass Of Vino	4	12	1
+A Glass Of Water	4	13	1
+A Glass Of Whiskey	4	15	1
+A Great Pick-Me-Up	3	14	1
+A Huge Bowl Of Fresh Raw Oysters	7	26	1
+A Large Box Of Jujyfruits	5	21	1
+A Large Bucket Of Buttered Popcorn	6	29	1
+A Large Glass Bowl Of Green Candy	7	27	1
+A Large Paper Cup Of Soda	6	20	1
+A Pan Of Fudge	4	11	1
+A Pan Of Warm Cornbread	5	19	1
+A Pint Of Ale	4	10	1
+A Pint Of Guinness	4	15	1
+A Pitcher Of Strawberry Lemonade	5	28	1
+A Pitcher Of Sweetened Iced Tea	6	26	1
+A Platter Of Cold Cuts & Cheese Slices	7	30	1
+A Pot Of Mulled Wine	5	16	1
+A Pot Of Seafood Gumbo	5	18	1
+A Rich Strong Cup Of Coffee	6	22	1
+A Scoop Of Gelato	4	14	1
+A Side Of Hummus	4	13	1
+A Side Of Potatoes	4	15	1
+A Slice Of A Hearty Vienna Bread	7	26	1
+A Slice Of Cheesecake	4	18	1
+A Slice Of Cherry Pie	5	17	1
+A Slice Of Coconut Layer Cake	6	24	1
+A Slice Of Hearty Vienna Bread	6	25	1
+A Small Dish With A Scoop Of Vanilla Ice Cream	10	37	1
+A Spicy Cheese Spread	4	18	1
+A Squeeze Of Lemon	4	15	1
+A Squirt Of Lime	4	13	1
+A Steaming-Hot Bowl Of Matzo-Ball Soup	6	31	1
+A Sweet Treat Fried Milk	5	20	1
+A Tablespoon Of Honey	4	18	1
+A Tasty Meal	3	10	1
+A Teaspoon Of Wild Honey	5	20	1
+A Thick Slice Of Boston Cream Pie	7	27	1
+A Variety Of Tasty Dipping Sauces	6	28	1
+A Warm Bowl Of Corned Beef & Cabbage	7	28	1
+A Whole Honeydew	3	14	1
+Abalone	1	7	7
+Acai Berries	2	11	4
+Acai Berry	2	9	4
+Acorn Squash	2	11	5
+Acorn Squash Puree	3	16	5
+Acorn-Squash Puree	2	16	11
+Affordable Meal	2	14	10
+After-Dinner Mint	2	15	11
+Aged Balsamic Vinegar	3	19	4
+Aged Cheddar	2	11	4
+Aged Cheddar Cheese
