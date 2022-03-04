@@ -3,11 +3,9 @@ package org.terminalteam.com;
 import org.academiadecodigo.bootcamp.Prompt;
 import org.academiadecodigo.bootcamp.scanners.string.StringInputScanner;
 
-import javax.swing.plaf.RootPaneUI;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,7 +28,6 @@ public class GameServer {
 
     public GameServer(int maxPlayers) {
         this.maxPlayers = maxPlayers;
-        userNumber = 0;
         serverWorkers = new LinkedList<>();
     }
 
@@ -46,11 +43,11 @@ public class GameServer {
         }
     }
 
-    private void serveClients(ExecutorService clientPool) throws IOException {
+    private synchronized void serveClients(ExecutorService clientPool) throws IOException {
 
         while (true) {
             Socket clientSocket = serverSocket.accept();
-            ServerWorker serverWorker = new ServerWorker(clientSocket, ++userNumber);
+            ServerWorker serverWorker = new ServerWorker(clientSocket);
 
 
             System.out.println(serverWorker.getUserName() + " connected!");
@@ -67,11 +64,11 @@ public class GameServer {
         private BufferedReader in;
         private PrintWriter out;
 
-        private ServerWorker(Socket clientSocket, int userNumber) throws IOException {
-            userName = "Client " + userNumber;
+        private ServerWorker(Socket clientSocket) throws IOException {
             prompt = new Prompt(clientSocket.getInputStream(), new PrintStream(clientSocket.getOutputStream()));
             in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new PrintWriter(clientSocket.getOutputStream(), true);
+            userName = askForUser();
         }
 
         public String getUserName() {
@@ -108,12 +105,24 @@ public class GameServer {
             return users.toString();
         }
 
-        public void showLogo() {
-            Path filePath = Paths.get("resources/logo.txt");
+        public void showFile(String path, ServerWorker sw) {
+            Path filePath = Paths.get(path);
             try {
                 List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
                 for (String line : lines) {
-                    for (ServerWorker sw : serverWorkers) {
+                    sw.out.println(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public synchronized void showFile(String path) {
+            Path filePath = Paths.get(path);
+            try {
+                List<String> lines = Files.readAllLines(filePath, StandardCharsets.UTF_8);
+                for (String line : lines) {
+                    for (ServerWorker sw: serverWorkers) {
                         sw.out.println(line);
                     }
                 }
@@ -122,39 +131,56 @@ public class GameServer {
             }
         }
 
-        public void askForUser() {
+        public String askForUser() {
             StringInputScanner userName = new StringInputScanner();
             userName.setMessage("Write your user name: ");
-            this.userName = prompt.getUserInput(userName);
+            String name = prompt.getUserInput(userName);
+            return name;
+        }
 
+        public void clearScreen(ServerWorker sw) {
+            sw.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        }
+
+        public int getPlayers() {
+            return serverWorkers.size();
         }
 
         public synchronized void waitMessage() {
             for (ServerWorker sw : serverWorkers) {
-                sw.out.println("\n\n\n\n\n\n");
-                sw.out.println("                        ---------------------------------");
+                showFile("resources/waiting.txt", sw);
+                clearScreen(sw);
+                if (checkPlayers()) return;
                 putThreadSleep(300);
-                sw.out.println("                        |...WAITING FOR OTHER PLAYERS...|");
+                showFile("resources/waitingfor.txt", sw);
+                clearScreen(sw);
+                if (checkPlayers()) return;
                 putThreadSleep(300);
-                sw.out.println("                        ---------------------------------");
+                showFile("resources/waitingforplayers.txt", sw);
+                clearScreen(sw);
+                putThreadSleep(800);
             }
         }
 
+        public boolean checkPlayers(){
+            return getPlayers() == maxPlayers;
+        }
+
         public void sendMessageToAll(String message) {
-            for (ServerWorker sw: serverWorkers) {
+            for (ServerWorker sw : serverWorkers) {
                 sw.out.println(message);
             }
         }
 
+
+
         @Override
         public void run() {
-            askForUser();
             sendJoinMessageToAll();
-            while (userNumber < maxPlayers){
+            while (getPlayers() != maxPlayers) {
                 waitMessage();
-                putThreadSleep(800);
             }
-            showLogo();
+            showFile("resources/logo.txt");
             sendMessageToAll(getAllUsers());
             while (true) {
                 /*try {
