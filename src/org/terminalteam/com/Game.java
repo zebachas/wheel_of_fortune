@@ -31,5 +31,9 @@ public class Game {
             this.filePath = filePath;
             this.name = name;
         }
+
+        public String getName() {
+            return name;
+        }
     }
 }

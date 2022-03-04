@@ -1,9 +1,9 @@
-A Damsel In Distress
-A Giant Robot
-A Howling Werewolf
-A Knight In Shining Armor
-A Phantom Holding A Sickle
-A Vampire Freaking Out At A Ray Of Sunlight
+Damsel In Distress
+Giant Robot
+Howling Werewolf
+Knight In Shining Armor
+Phantom Holding A Sickle
+Vampire Freaking Out At A Ray Of Sunlight
 Abby Sciuto
 Abominable Snowman
 Abraham Woodhull
