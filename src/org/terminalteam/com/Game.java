@@ -17,23 +17,29 @@ public class Game {
     }
 
     public enum Category {
-        FOOD_AND_DRINK("resources/foodanddrink.txt", "Food and Drinks"),
-        FUN_AND_GAMES("resources/funandgames.txt", "Fun and Games"),
-        MOVIE_QUOTES("resources/moviequotes.txt", "Movie Quotes"),
-        FICTIONAL_CHARACTERS("resources/fictionalcharacters.txt", "Fictional Characters"),
-        OCCUPATIONS("resources/occupations.txt", "Occupations"),
-        SLOGANS("resources/slogan.txt", "Slogan");
+        FOOD_AND_DRINK("resources/foodanddrink.txt", "Food and Drinks", 1),
+        FUN_AND_GAMES("resources/funandgames.txt", "Fun and Games", 2),
+        MOVIE_QUOTES("resources/moviequotes.txt", "Movie Quotes", 3),
+        FICTIONAL_CHARACTERS("resources/fictionalcharacters.txt", "Fictional Characters", 4),
+        OCCUPATIONS("resources/occupations.txt", "Occupations", 5),
+        SLOGANS("resources/slogan.txt", "Slogan", 6);
 
         private String filePath;
         private String name;
+        private int number;
 
-        Category(String filePath, String name) {
+        Category(String filePath, String name, int number) {
             this.filePath = filePath;
             this.name = name;
+            this.number = number;
         }
 
         public String getName() {
             return name;
+        }
+
+        public String getFilePath() {
+            return filePath;
         }
     }
 }

@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -25,12 +26,15 @@ public class GameServer {
     private ServerSocket serverSocket;
     private final LinkedList<ServerWorker> serverWorkers;
     private int maxPlayers;
-    private int players = 0;
+    private int players;
+    private LinkedList<Integer> votes;
 
 
     public GameServer(int maxPlayers) {
         this.maxPlayers = maxPlayers;
         serverWorkers = new LinkedList<>();
+        players = 0;
+        votes = new LinkedList<>();
     }
 
     public void listen(int port) {
@@ -60,7 +64,6 @@ public class GameServer {
             }
         }
     }
-
 
 
     private class ServerWorker implements Runnable {
@@ -97,13 +100,13 @@ public class GameServer {
             out.println(one);
             out.println(two);
             out.println(three);
-            for (ServerWorker sw: serverWorkers) {
+            for (ServerWorker sw : serverWorkers) {
                 users.append(sw.getUserName()).append("\n");
             }
 
             return users.toString();
         }
-        
+
 
         public void showFile(String path) {
             Path filePath = Paths.get(path);
@@ -131,20 +134,20 @@ public class GameServer {
         }
 
         public void waitMessage() {
-                showFile("resources/waiting.txt");
-                clearScreen();
-                if (checkPlayers()) return;
-                putThreadSleep(300);
-                showFile("resources/waitingfor.txt");
-                clearScreen();
-                if (checkPlayers()) return;
-                putThreadSleep(300);
-                showFile("resources/waitingforplayers.txt");
-                clearScreen();
-                putThreadSleep(800);
+            showFile("resources/waiting.txt");
+            clearScreen();
+            if (checkPlayers()) return;
+            putThreadSleep(300);
+            showFile("resources/waitingfor.txt");
+            clearScreen();
+            if (checkPlayers()) return;
+            putThreadSleep(300);
+            showFile("resources/waitingforplayers.txt");
+            clearScreen();
+            putThreadSleep(800);
         }
 
-        public boolean checkPlayers(){
+        public boolean checkPlayers() {
             return players == maxPlayers;
         }
 
@@ -155,12 +158,7 @@ public class GameServer {
         }
 
 
-        public String showWord() {
-            WordLine wordLine = new WordLine(0, "Academia");
-            return wordLine.printLine();
-        }
-
-        public void showMenu() {
+        public void getVote() {
             String[] options = new String[Game.Category.values().length];
 
             for (int i = 0; i < options.length; i++) {
@@ -174,8 +172,52 @@ public class GameServer {
             MenuInputScanner scanner = new MenuInputScanner(options);
             scanner.setMessage(one + two + three);
 
-            int answerIndex = prompt.getUserInput(scanner);
-            System.out.println(answerIndex);
+            int vote = prompt.getUserInput(scanner);
+            votes.add(vote);
+        }
+
+        public Game.Category choseCategory() {
+            HashMap<Integer, Integer> voteCount = new HashMap<>();
+            for (int vote : votes) {
+                if (!voteCount.containsKey(vote)) {
+                    voteCount.put(vote, 1);
+                } else {
+                    voteCount.put(vote, voteCount.get(vote) + 1);
+                }
+            }
+
+            int mostCommon = 0;
+
+            for (int voteNum : voteCount.keySet()) {
+                if (voteNum > mostCommon) {
+                    mostCommon = voteNum;
+                }
+            }
+
+            return Game.Category.values()[mostCommon - 1];
+        }
+
+        public String fetchRandomSentence(Game.Category category) throws IOException {
+            Path path = Paths.get(category.getFilePath());
+            long numLines = 0;
+
+            numLines = Files.lines(path).count();
+            int randomLine = (int) (Math.random() * numLines);
+
+            return Files.readAllLines(path).get(randomLine);
+        }
+
+        public void createWord() throws IOException {
+            String sentence = fetchRandomSentence(choseCategory());
+            String[] words = sentence.split("\\W+");
+
+            for (int i = 0; i < words.length; i++) {
+                System.out.println("here");
+                WordLine wordline = new WordLine(i, words[i]);
+                wordline.writeWord();
+                out.println(wordline.printLine());
+                System.out.println(wordline.printLine());
+            }
         }
 
         @Override
@@ -191,7 +233,20 @@ public class GameServer {
 
             showFile("resources/logo.txt");
             out.println(getAllUsers());
-            showMenu();
+
+            getVote();
+            while (votes.size() < maxPlayers) ;
+            System.out.println(choseCategory().getName());
+
+
+            try {
+                createWord();
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
+
+
             //sendMessageToAll(showWord());
 
         }

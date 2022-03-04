@@ -9,8 +9,8 @@ public class Letter {
         show = false;
     }
 
-    public void show() {
-        show = true;
+    public void setShow(boolean show) {
+        this.show = show;
     }
 
     public boolean isShown() {
@@ -27,5 +27,9 @@ public class Letter {
         }
 
         return " ";
+    }
+
+    public void setLetter(String letter) {
+        this.letter = letter;
     }
 }

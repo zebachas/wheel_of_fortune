@@ -19,22 +19,33 @@ public class WordLine {
     private Letter Thirteen;
     private Letter Fourteen;
     private Letter Fifteen;
+    private Letter[] letters;
 
     public WordLine(int lineNumber, String word) {
         this.lineNumber = lineNumber;
         this.word = word;
-        writeWord();
+        letters = new Letter[]{One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Eleven, Twelve, Thirteen, Fourteen, Fifteen};
     }
 
     public void writeWord() {
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < letters.length; i++) {
             if (i > word.length() - 1) {
                 setChar(i, "*");
-                continue;
+            } else {
+                setChar(i, String.valueOf(word.charAt(i)));
             }
-            setChar(i, String.valueOf(word.charAt(i)));
         }
     }
+
+    public void showAsteriscs() {
+        for (Letter letter : letters) {
+            if (letter.getLetter().equals("*")) {
+                //letter.show();
+            }
+        }
+    }
+
+
 
 
     public String printLine() {
