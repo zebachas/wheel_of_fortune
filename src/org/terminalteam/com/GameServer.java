@@ -18,46 +18,59 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class GameServer {
-    //
-    //
-
-    private int userNumber;
-
     private ServerSocket serverSocket;
     private final LinkedList<ServerWorker> serverWorkers;
     private int maxPlayers;
     private int players;
     private LinkedList<Integer> votes;
+    private String gameSentence;
+    private String playerSentence;
+    private Game.Category chosenCategory;
+    private boolean over;
 
 
     public GameServer(int maxPlayers) {
         this.maxPlayers = maxPlayers;
         serverWorkers = new LinkedList<>();
+        this.gameSentence = null;
         players = 0;
         votes = new LinkedList<>();
+        over = false;
     }
 
     public void listen(int port) {
         ExecutorService clientPool = Executors.newCachedThreadPool();
 
+
         try {
             serverSocket = new ServerSocket(port);
             serveClients(clientPool);
-
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        while (true) {
+            System.out.println(votes.size());
+            if (votes.size() == serverWorkers.size()) {
+                System.out.println();
+                chosenCategory = countVotes();
+                try {
+                    gameSentence = fetchRandomSentence(chosenCategory);
+                    generatePlayerSentence();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            }
         }
     }
 
     private void serveClients(ExecutorService clientPool) throws IOException {
         synchronized (serverWorkers) {
 
-            while (players != maxPlayers) {
+            while (serverWorkers.size() < maxPlayers) {
                 Socket clientSocket = serverSocket.accept();
                 ServerWorker serverWorker = new ServerWorker(clientSocket);
-
-
-                System.out.println(serverWorker.getUserName() + " connected!");
 
                 serverWorkers.add(serverWorker);
                 clientPool.submit(serverWorker);
@@ -65,6 +78,50 @@ public class GameServer {
         }
     }
 
+    public Game.Category countVotes() {
+        HashMap<Integer, Integer> voteCount = new HashMap<>();
+        for (int vote : votes) {
+            if (!voteCount.containsKey(vote)) {
+                voteCount.put(vote, 1);
+            } else {
+                voteCount.put(vote, voteCount.get(vote) + 1);
+            }
+        }
+
+        int mostCommon = 0;
+
+        for (int voteNum : voteCount.keySet()) {
+            if (voteNum > mostCommon) {
+                mostCommon = voteNum;
+            }
+        }
+
+        return Game.Category.values()[mostCommon - 1];
+    }
+
+    public String fetchRandomSentence(Game.Category category) throws IOException {
+        Path path = Paths.get(category.getFilePath());
+        long numLines = 0;
+
+        numLines = Files.lines(path).count();
+        int randomLine = (int) (Math.random() * numLines);
+
+        return Files.readAllLines(path).get(randomLine);
+    }
+
+    public void generatePlayerSentence() {
+        playerSentence = "";
+
+        for (int i = 0; i < gameSentence.length(); i++) {
+            if (String.valueOf(gameSentence.charAt(i)).equals(" ")) {
+                playerSentence += " ";
+            } else {
+                playerSentence += "_";
+            }
+        }
+
+
+    }
 
     private class ServerWorker implements Runnable {
         private String userName;
@@ -84,11 +141,6 @@ public class GameServer {
             return userName;
         }
 
-        public void sendDisconnectMessage() {
-            for (ServerWorker sw : serverWorkers) {
-                //sw.getOut().println(userName + " has disconnected.");
-            }
-        }
 
         public String getAllUsers() {
             StringBuilder users = new StringBuilder();
@@ -176,48 +228,21 @@ public class GameServer {
             votes.add(vote);
         }
 
-        public Game.Category choseCategory() {
-            HashMap<Integer, Integer> voteCount = new HashMap<>();
-            for (int vote : votes) {
-                if (!voteCount.containsKey(vote)) {
-                    voteCount.put(vote, 1);
-                } else {
-                    voteCount.put(vote, voteCount.get(vote) + 1);
-                }
-            }
 
-            int mostCommon = 0;
-
-            for (int voteNum : voteCount.keySet()) {
-                if (voteNum > mostCommon) {
-                    mostCommon = voteNum;
-                }
-            }
-
-            return Game.Category.values()[mostCommon - 1];
-        }
-
-        public String fetchRandomSentence(Game.Category category) throws IOException {
-            Path path = Paths.get(category.getFilePath());
-            long numLines = 0;
-
-            numLines = Files.lines(path).count();
-            int randomLine = (int) (Math.random() * numLines);
-
-            return Files.readAllLines(path).get(randomLine);
-        }
 
         public void createWord() throws IOException {
-            String sentence = fetchRandomSentence(choseCategory());
-            String[] words = sentence.split("\\W+");
+            String[] words = gameSentence.split("\\W+");
 
-            for (int i = 0; i < words.length; i++) {
+            /*for (int i = 0; i < words.length; i++) {
                 System.out.println("here");
+
                 WordLine wordline = new WordLine(i, words[i]);
                 wordline.writeWord();
+
                 out.println(wordline.printLine());
                 System.out.println(wordline.printLine());
-            }
+            }*/
+            out.println(gameSentence);
         }
 
         @Override
@@ -234,18 +259,22 @@ public class GameServer {
             showFile("resources/logo.txt");
             out.println(getAllUsers());
 
+            putThreadSleep(2000);
+
             getVote();
-            while (votes.size() < maxPlayers) ;
-            System.out.println(choseCategory().getName());
 
+            out.println("waiting for votes");
 
-            try {
-                createWord();
-            } catch (IOException e) {
-                e.printStackTrace();
-
+            while (votes.size() < serverWorkers.size()){
+                System.out.println();
             }
 
+            while (!over) {
+                putThreadSleep(100);
+                System.out.println();
+                out.println(playerSentence);
+                putThreadSleep(7500);
+            }
 
             //sendMessageToAll(showWord());
 
