@@ -26,10 +26,7 @@ public class GameServer {
     private String gameSentence;
     private String playerSentence;
     private Game.Category chosenCategory;
-    private boolean over;
-
-
-
+    private boolean roundOver;
 
     public GameServer(int maxPlayers) {
         this.maxPlayers = maxPlayers;
@@ -37,13 +34,11 @@ public class GameServer {
         this.gameSentence = null;
         players = 0;
         votes = new LinkedList<>();
-        over = false;
-
+        roundOver = false;
     }
 
     public void listen(int port) {
         ExecutorService clientPool = Executors.newCachedThreadPool();
-
 
         try {
             serverSocket = new ServerSocket(port);
@@ -51,6 +46,8 @@ public class GameServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
         while (true) {
             System.out.print("");
             if (votes.size() == serverWorkers.size()) {
@@ -69,14 +66,14 @@ public class GameServer {
 
         showAll(chosenCategory.getArtPath());
 
-        while (!over) {
+        while (!roundOver) {
             putThreadSleep(100);
             System.out.println();
             sendAll(playerSentence);
             putThreadSleep(8000);
             showRandomLetter();
         }
-        showAll("/roundover.txt");
+        showAll("resources/roundover.txt");
 
     }
 
@@ -117,7 +114,7 @@ public class GameServer {
     public String playersScores() {
         StringBuilder users = new StringBuilder();
 
-        showAll("scores.txt");
+        showAll("resources/scores.txt");
 
         for (ServerWorker sw : serverWorkers) {
             users.append(sw.getUserName()).append(": ").append(sw.score).append(" points.").append("\n");
@@ -128,9 +125,7 @@ public class GameServer {
 
     public String fetchRandomSentence(Game.Category category) throws IOException {
         Path path = Paths.get(category.getFilePath());
-        long numLines = 0;
-
-        numLines = Files.lines(path).count();
+        long numLines = Files.lines(path).count();
         int randomLine = (int) (Math.random() * numLines);
         return Files.readAllLines(path).get(randomLine).toUpperCase();
     }
@@ -204,7 +199,7 @@ public class GameServer {
         public String getAllUsers() {
             StringBuilder users = new StringBuilder();
 
-            showFile("playersplaying.txt");
+            showFile("resources/playersplaying.txt");
 
             for (ServerWorker sw : serverWorkers) {
                 users.append(sw.getUserName()).append("\n");
@@ -240,17 +235,17 @@ public class GameServer {
         }
 
         public void waitMessage() {
-            showFile("waiting.txt");
+            showFile("resources/waiting.txt");
             clearScreen();
             clearScreen();
             if (checkPlayers()) return;
             putThreadSleep(300);
-            showFile("waitingfor.txt");
+            showFile("resources/waitingfor.txt");
             clearScreen();
             clearScreen();
             if (checkPlayers()) return;
             putThreadSleep(300);
-            showFile("waitingforplayers.txt");
+            showFile("resources/waitingforplayers.txt");
             clearScreen();
             clearScreen();
             putThreadSleep(800);
@@ -268,7 +263,7 @@ public class GameServer {
                 options[i] = Game.Category.values()[i].getName();
             }
             MenuInputScanner scanner = new MenuInputScanner(options);
-            showFile("entervote.txt");
+            showFile("resources/entervote.txt");
 
             int vote = prompt.getUserInput(scanner);
             votes.add(vote);
@@ -276,31 +271,31 @@ public class GameServer {
 
 
         public void gameRules() {
-            showFile("gamerulesinitial.txt");
+            showFile("resources/gamerulesinitial.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("gamerulesSTEP1.txt");
+            showFile("resources/gamerulesSTEP1.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("gamerulesSTEP2.txt");
+            showFile("resources/gamerulesSTEP2.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("gamerulesSTEP3.txt");
+            showFile("resources/gamerulesSTEP3.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("gamerulesSTEP4.txt");
+            showFile("resources/gamerulesSTEP4.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("gamerulesSTEP5.txt");
+            showFile("resources/gamerulesSTEP5.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("gamerulesSTEP6.txt");
+            showFile("resources/gamerulesSTEP6.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("gamerulesSTEP7.txt");
+            showFile("resources/gamerulesSTEP7.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("gamerulesfinal.txt");
+            showFile("resources/gamerulesfinal.txt");
             putThreadSleep(5000);
         }
 
@@ -321,7 +316,7 @@ public class GameServer {
             clearScreen();
             clearScreen();
 
-            showFile("logo.txt");
+            showFile("resources/logo.txt");
             putThreadSleep(2500);
             clearScreen();
             clearScreen();
@@ -344,12 +339,13 @@ public class GameServer {
             clearScreen();
             clearScreen();
 
-            showFile("waitingforvotes.txt");
+            showFile("resources/waitingforvotes.txt");
 
             while (votes.size() < serverWorkers.size()) {
                 System.out.println();
             }
 
+            clearScreen();
             clearScreen();
             clearScreen();
             clearScreen();
@@ -365,9 +361,11 @@ public class GameServer {
                 if (answer.equals(gameSentence)) {
                     sendAll("PLAYER: " + userName + " HAS GUESSED THE PHRASE");
                     sendAll(userName + " IS THE WINNER!!!!!!!!");
-                    over = true;
+                    roundOver = true;
                     score++;
                     break;
+                } else {
+                    out.println("Wrong! Try again!");
                 }
             }
 
