@@ -50,7 +50,7 @@ public class GameServer {
         }
 
         while (true) {
-            System.out.println(votes.size());
+            System.out.print("");
             if (votes.size() == serverWorkers.size()) {
                 System.out.println();
                 chosenCategory = countVotes();
@@ -62,6 +62,15 @@ public class GameServer {
                 }
                 break;
             }
+        }
+
+        showAll(chosenCategory.getArtPath());
+
+        while (!over) {
+            putThreadSleep(100);
+            System.out.println();
+            sendAll(playerSentence);
+            putThreadSleep(6000);
         }
     }
 
@@ -119,8 +128,26 @@ public class GameServer {
                 playerSentence += "_";
             }
         }
+    }
 
+    public void showAll(String filePath) {
+        for (ServerWorker sw : serverWorkers) {
+            sw.showFile(filePath);
+        }
+    }
 
+    public void sendAll(String message) {
+        for (ServerWorker sw : serverWorkers) {
+            sw.out.println(message);
+        }
+    }
+
+    public void putThreadSleep(int num) {
+        try {
+            Thread.sleep(num);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private class ServerWorker implements Runnable {
@@ -144,14 +171,18 @@ public class GameServer {
 
         public String getAllUsers() {
             StringBuilder users = new StringBuilder();
-            String one = "                        ---------------------------------";
+
+            /*String one = "                        ---------------------------------";
             String two = "                        |........PLAYERS PLAYING........|";
             String three = "                        ---------------------------------";
 
             out.println("\n");
             out.println(one);
             out.println(two);
-            out.println(three);
+            out.println(three);*/
+
+            showFile("resources/playersplaying.txt");
+
             for (ServerWorker sw : serverWorkers) {
                 users.append(sw.getUserName()).append("\n");
             }
@@ -188,13 +219,16 @@ public class GameServer {
         public void waitMessage() {
             showFile("resources/waiting.txt");
             clearScreen();
+            clearScreen();
             if (checkPlayers()) return;
             putThreadSleep(300);
             showFile("resources/waitingfor.txt");
             clearScreen();
+            clearScreen();
             if (checkPlayers()) return;
             putThreadSleep(300);
             showFile("resources/waitingforplayers.txt");
+            clearScreen();
             clearScreen();
             putThreadSleep(800);
         }
@@ -216,18 +250,18 @@ public class GameServer {
             for (int i = 0; i < options.length; i++) {
                 options[i] = Game.Category.values()[i].getName();
             }
-            String one = "                         ------------------------------------------\n";
+
+           /* String one = "                         ------------------------------------------\n";
             String two = "                        |........PLEASE VOTE FOR A CATEGORY........|\n";
             String three = "                         ------------------------------------------\n";
 
-
+*/
             MenuInputScanner scanner = new MenuInputScanner(options);
-            scanner.setMessage(one + two + three);
+            showFile("resources/entervote.txt");
 
             int vote = prompt.getUserInput(scanner);
             votes.add(vote);
         }
-
 
 
         public void createWord() throws IOException {
@@ -251,29 +285,51 @@ public class GameServer {
             System.out.println(Thread.currentThread().getName());
 
             askForUser();
+            clearScreen();
+            clearScreen();
 
             while (players != maxPlayers) {
                 waitMessage();
             }
+            putThreadSleep(2500);
+            clearScreen();
+            clearScreen();
+            clearScreen();
 
             showFile("resources/logo.txt");
+            putThreadSleep(2500);
+            clearScreen();
+            clearScreen();
+            clearScreen();
             out.println(getAllUsers());
 
             putThreadSleep(2000);
+            clearScreen();
+            clearScreen();
+            clearScreen();
 
             getVote();
 
-            out.println("waiting for votes");
+            clearScreen();
+            clearScreen();
+            clearScreen();
 
-            while (votes.size() < serverWorkers.size()){
+            showFile("resources/waitingforvotes.txt");
+
+            while (votes.size() < serverWorkers.size()) {
                 System.out.println();
             }
 
+            clearScreen();
+            clearScreen();
+            clearScreen();
+
             while (!over) {
-                putThreadSleep(100);
-                System.out.println();
-                out.println(playerSentence);
-                putThreadSleep(7500);
+                StringInputScanner scanner = new StringInputScanner();
+                scanner.setMessage("Try to guess the sentence!!!\n");
+                putThreadSleep(200);
+                String answer = prompt.getUserInput(scanner);
+                System.out.println(answer);
             }
 
             //sendMessageToAll(showWord());
