@@ -5,16 +5,16 @@ public class Game {
     private int maxPlayers;
     private int port;
     private GameServer gameServer;
+    private int numberOfRounds;
 
-
-    public Game(int numberOfPlayers, int port) {
+    public Game(int numberOfPlayers, int port, int numberOfRounds) {
         this.maxPlayers = numberOfPlayers;
         this.port = port;
-
+        this.numberOfRounds = numberOfRounds;
     }
 
     public void start() {
-        gameServer = new GameServer(maxPlayers);
+        gameServer = new GameServer(maxPlayers, numberOfRounds);
         gameServer.listen(port);
     }
 

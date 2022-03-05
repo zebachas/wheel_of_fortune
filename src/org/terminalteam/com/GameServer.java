@@ -27,14 +27,18 @@ public class GameServer {
     private String playerSentence;
     private Game.Category chosenCategory;
     private boolean roundOver;
+    private int numberOfRounds;
+    private int currentRound;
 
-    public GameServer(int maxPlayers) {
+    public GameServer(int maxPlayers, int numberOfRounds) {
         this.maxPlayers = maxPlayers;
+        this.numberOfRounds = numberOfRounds;
         serverWorkers = new LinkedList<>();
         this.gameSentence = null;
         players = 0;
         votes = new LinkedList<>();
         roundOver = false;
+        currentRound = 0;
     }
 
     public void listen(int port) {
@@ -47,34 +51,42 @@ public class GameServer {
             e.printStackTrace();
         }
 
+        while (currentRound < numberOfRounds) {
 
-        while (true) {
-            System.out.print("");
-            if (votes.size() == serverWorkers.size()) {
-                System.out.println();
-                chosenCategory = countVotes();
-                try {
-                    gameSentence = fetchRandomSentence(chosenCategory);
-                    System.out.println(gameSentence);
-                    generatePlayerSentence();
-                } catch (IOException e) {
-                    e.printStackTrace();
+            roundOver = false;
+
+            while (true) {
+                System.out.print("");
+                if (votes.size() == serverWorkers.size()) {
+                    System.out.println();
+                    chosenCategory = countVotes();
+                    try {
+                        gameSentence = fetchRandomSentence(chosenCategory);
+                        System.out.println(gameSentence);
+                        generatePlayerSentence();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 }
-                break;
             }
+
+            showAll(chosenCategory.getArtPath());
+
+            while (!roundOver) {
+                putThreadSleep(100);
+                System.out.println();
+                sendAll(playerSentence);
+                putThreadSleep(8000);
+                showRandomLetter();
+            }
+            showAll("resources/roundover.txt");
+            votes.clear();
+            currentRound++;
         }
 
-        showAll(chosenCategory.getArtPath());
-
-        while (!roundOver) {
-            putThreadSleep(100);
-            System.out.println();
-            sendAll(playerSentence);
-            putThreadSleep(8000);
-            showRandomLetter();
-        }
-        showAll("resources/roundover.txt");
-
+        showAll("resources/scores.txt");
+        showAll(playersScores());
     }
 
     private void serveClients(ExecutorService clientPool) throws IOException {
@@ -113,8 +125,6 @@ public class GameServer {
 
     public String playersScores() {
         StringBuilder users = new StringBuilder();
-
-        showAll("resources/scores.txt");
 
         for (ServerWorker sw : serverWorkers) {
             users.append(sw.getUserName()).append(": ").append(sw.score).append(" points.").append("\n");
@@ -333,43 +343,44 @@ public class GameServer {
             clearScreen();
             clearScreen();
 
-            getVote();
-            putThreadSleep(2000);
-            clearScreen();
-            clearScreen();
-            clearScreen();
+            while (currentRound < numberOfRounds) {
 
-            showFile("resources/waitingforvotes.txt");
+                getVote();
+                putThreadSleep(2000);
+                clearScreen();
+                clearScreen();
+                clearScreen();
 
-            while (votes.size() < serverWorkers.size()) {
-                System.out.println();
-            }
+                showFile("resources/waitingforvotes.txt");
 
-            clearScreen();
-            clearScreen();
-            clearScreen();
-            clearScreen();
+                while (votes.size() < serverWorkers.size()) {
+                    System.out.println();
+                }
 
-            sendAll("Number of Words: " + gameSentence.split(" ").length);
+                clearScreen();
+                clearScreen();
+                clearScreen();
+                clearScreen();
 
-            while (true) {
-                StringInputScanner scanner = new StringInputScanner();
-                scanner.setMessage("Try to guess the sentence!!!\n");
-                putThreadSleep(200);
-                answer = prompt.getUserInput(scanner);
-                System.out.println(answer);
-                if (answer.equals(gameSentence)) {
-                    sendAll("PLAYER: " + userName + " HAS GUESSED THE PHRASE");
-                    sendAll(userName + " IS THE WINNER!!!!!!!!");
-                    roundOver = true;
-                    score++;
-                    break;
-                } else {
-                    out.println("Wrong! Try again!");
+                sendAll("Number of Words: " + gameSentence.split(" ").length);
+
+                while (true) {
+                    StringInputScanner scanner = new StringInputScanner();
+                    scanner.setMessage("Try to guess the sentence!!!\n");
+                    putThreadSleep(200);
+                    answer = prompt.getUserInput(scanner);
+                    System.out.println(answer);
+                    if (answer.equals(gameSentence)) {
+                        sendAll("PLAYER: " + userName + " HAS GUESSED THE PHRASE");
+                        sendAll(userName + " IS THE WINNER!!!!!!!!");
+                        roundOver = true;
+                        score++;
+                        break;
+                    } else {
+                        out.println("Wrong! Try again!");
+                    }
                 }
             }
-
-
         }
 
         public void putThreadSleep(int num) {
