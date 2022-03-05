@@ -27,7 +27,8 @@ public class GameServer {
     private String playerSentence;
     private Game.Category chosenCategory;
     private boolean over;
-    private String winnerName;
+
+
 
 
     public GameServer(int maxPlayers) {
@@ -37,6 +38,7 @@ public class GameServer {
         players = 0;
         votes = new LinkedList<>();
         over = false;
+
     }
 
     public void listen(int port) {
@@ -49,7 +51,6 @@ public class GameServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         while (true) {
             System.out.print("");
             if (votes.size() == serverWorkers.size()) {
@@ -75,6 +76,8 @@ public class GameServer {
             putThreadSleep(8000);
             showRandomLetter();
         }
+        showAll("/roundover.txt");
+
     }
 
     private void serveClients(ExecutorService clientPool) throws IOException {
@@ -109,6 +112,18 @@ public class GameServer {
         }
 
         return Game.Category.values()[mostCommon - 1];
+    }
+
+    public String playersScores() {
+        StringBuilder users = new StringBuilder();
+
+        showAll("scores.txt");
+
+        for (ServerWorker sw : serverWorkers) {
+            users.append(sw.getUserName()).append(": ").append(sw.score).append(" points.").append("\n");
+        }
+
+        return users.toString();
     }
 
     public String fetchRandomSentence(Game.Category category) throws IOException {
@@ -148,7 +163,7 @@ public class GameServer {
     }
 
     public void clearAllScreens() {
-        for (ServerWorker sw: serverWorkers) {
+        for (ServerWorker sw : serverWorkers) {
             sw.clearScreen();
         }
     }
@@ -169,16 +184,13 @@ public class GameServer {
 
     private class ServerWorker implements Runnable {
         private String userName;
-        private String receivedMessage;
         private Prompt prompt;
-        private BufferedReader in;
         private PrintWriter out;
         private int score;
         private String answer;
 
         private ServerWorker(Socket clientSocket) throws IOException {
             prompt = new Prompt(clientSocket.getInputStream(), new PrintStream(clientSocket.getOutputStream()));
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             out = new PrintWriter(clientSocket.getOutputStream(), true);
             userName = null;
             answer = "";
@@ -192,16 +204,7 @@ public class GameServer {
         public String getAllUsers() {
             StringBuilder users = new StringBuilder();
 
-            /*String one = "                        ---------------------------------";
-            String two = "                        |........PLAYERS PLAYING........|";
-            String three = "                        ---------------------------------";
-
-            out.println("\n");
-            out.println(one);
-            out.println(two);
-            out.println(three);*/
-
-            showFile("resources/playersplaying.txt");
+            showFile("playersplaying.txt");
 
             for (ServerWorker sw : serverWorkers) {
                 users.append(sw.getUserName()).append("\n");
@@ -237,17 +240,17 @@ public class GameServer {
         }
 
         public void waitMessage() {
-            showFile("resources/waiting.txt");
+            showFile("waiting.txt");
             clearScreen();
             clearScreen();
             if (checkPlayers()) return;
             putThreadSleep(300);
-            showFile("resources/waitingfor.txt");
+            showFile("waitingfor.txt");
             clearScreen();
             clearScreen();
             if (checkPlayers()) return;
             putThreadSleep(300);
-            showFile("resources/waitingforplayers.txt");
+            showFile("waitingforplayers.txt");
             clearScreen();
             clearScreen();
             putThreadSleep(800);
@@ -255,12 +258,6 @@ public class GameServer {
 
         public boolean checkPlayers() {
             return players == maxPlayers;
-        }
-
-        public void sendMessageToAll(String message) {
-            for (ServerWorker sw : serverWorkers) {
-                sw.out.println(message);
-            }
         }
 
 
@@ -271,54 +268,39 @@ public class GameServer {
                 options[i] = Game.Category.values()[i].getName();
             }
             MenuInputScanner scanner = new MenuInputScanner(options);
-            showFile("resources/entervote.txt");
+            showFile("entervote.txt");
 
             int vote = prompt.getUserInput(scanner);
             votes.add(vote);
         }
 
 
-        public void createWord() throws IOException {
-            String[] words = gameSentence.split("\\W+");
-
-            /*for (int i = 0; i < words.length; i++) {
-                System.out.println("here");
-
-                WordLine wordline = new WordLine(i, words[i]);
-                wordline.writeWord();
-
-                out.println(wordline.printLine());
-                System.out.println(wordline.printLine());
-            }*/
-            out.println(gameSentence);
-        }
-
         public void gameRules() {
-            showFile("resources/gamerulesinitial.txt");
+            showFile("gamerulesinitial.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("resources/gamerulesSTEP1.txt");
+            showFile("gamerulesSTEP1.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("resources/gamerulesSTEP2.txt");
+            showFile("gamerulesSTEP2.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("resources/gamerulesSTEP3.txt");
+            showFile("gamerulesSTEP3.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("resources/gamerulesSTEP4.txt");
+            showFile("gamerulesSTEP4.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("resources/gamerulesSTEP5.txt");
+            showFile("gamerulesSTEP5.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("resources/gamerulesSTEP6.txt");
+            showFile("gamerulesSTEP6.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("resources/gamerulesSTEP7.txt");
+            showFile("gamerulesSTEP7.txt");
             clearAllScreens();
             putThreadSleep(1000);
-            showFile("resources/gamerulesfinal.txt");
+            showFile("gamerulesfinal.txt");
             putThreadSleep(5000);
         }
 
@@ -339,7 +321,7 @@ public class GameServer {
             clearScreen();
             clearScreen();
 
-            showFile("resources/logo.txt");
+            showFile("logo.txt");
             putThreadSleep(2500);
             clearScreen();
             clearScreen();
@@ -362,7 +344,7 @@ public class GameServer {
             clearScreen();
             clearScreen();
 
-            showFile("resources/waitingforvotes.txt");
+            showFile("waitingforvotes.txt");
 
             while (votes.size() < serverWorkers.size()) {
                 System.out.println();
@@ -372,25 +354,24 @@ public class GameServer {
             clearScreen();
             clearScreen();
 
+            sendAll("Number of Words: " + gameSentence.split(" ").length);
+
             while (true) {
                 StringInputScanner scanner = new StringInputScanner();
                 scanner.setMessage("Try to guess the sentence!!!\n");
                 putThreadSleep(200);
                 answer = prompt.getUserInput(scanner);
                 System.out.println(answer);
-                if (answer.equals(gameSentence)){
+                if (answer.equals(gameSentence)) {
                     sendAll("PLAYER: " + userName + " HAS GUESSED THE PHRASE");
-                    sendAll(userName + "IS THE WINNER!!!!!!!!");
+                    sendAll(userName + " IS THE WINNER!!!!!!!!");
                     over = true;
                     score++;
                     break;
                 }
             }
 
-        }
 
-        public String getAnswer() {
-            return answer;
         }
 
         public void putThreadSleep(int num) {

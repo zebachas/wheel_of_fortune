@@ -6,9 +6,11 @@ public class Game {
     private int port;
     private GameServer gameServer;
 
+
     public Game(int numberOfPlayers, int port) {
         this.maxPlayers = numberOfPlayers;
         this.port = port;
+
     }
 
     public void start() {
@@ -17,12 +19,12 @@ public class Game {
     }
 
     public enum Category {
-        FOOD_AND_DRINKS("resources/foodanddrink.txt", "Food and Drinks", 1, "resources/foodanddrinkart.txt"),
-        FUN_AND_GAMES("resources/funandgames.txt", "Fun and Games", 2, "resources/funandgamesart.txt"),
-        MOVIE_QUOTES("resources/moviequotes.txt", "Movie Quotes", 3, "resources/moviequotesart.txt"),
-        FICTIONAL_CHARACTERS("resources/fictionalcharacters.txt", "Fictional Characters", 4, "resources/fictionalcharactersart.txt"),
-        OCCUPATIONS("resources/occupations.txt", "Occupations", 5, "resources/occupationsart.txt"),
-        SLOGANS("resources/slogan.txt", "Slogan", 6, "resources/sloganart.txt");
+        FOOD_AND_DRINKS("foodanddrink.txt", "Food and Drinks", 1, "foodanddrinkart.txt"),
+        FUN_AND_GAMES("funandgames.txt", "Fun and Games", 2, "funandgamesart.txt"),
+        MOVIE_QUOTES("moviequotes.txt", "Movie Quotes", 3, "moviequotesart.txt"),
+        FICTIONAL_CHARACTERS("fictionalcharacters.txt", "Fictional Characters", 4, "fictionalcharactersart.txt"),
+        OCCUPATIONS("occupations.txt", "Occupations", 5, "occupationsart.txt"),
+        SLOGANS("slogan.txt", "Slogan", 6, "sloganart.txt");
 
         private String filePath;
         private String name;
